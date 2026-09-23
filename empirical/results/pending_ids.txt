@@ -1,0 +1,7 @@
+sonnet_l16_s0 a451a759b48889e65
+sonnet_l20_s0 a0b2047e9afe1c6e4
+sonnet_l24_s0 adf58f1d60e653f61
+sonnet_l28_s0 ae868e621cfc0fcf3
+sonnet_l32_s0 a1004c96b53de597a
+sonnet_l36_s0 a243d601e329090aa
+sonnet_l40_s0 afb2537111441240b

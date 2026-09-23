@@ -1,0 +1,107 @@
+{
+ "episode": "sonnet_l20_s0",
+ "model": "claude-sonnet-5 (Claude Code subagent, effort medium)",
+ "lam": 20,
+ "wall_secs_episode": 383.6,
+ "status": "finished",
+ "live": {
+  "lam": 20,
+  "N": "681047",
+  "x": "248364",
+  "lb_expected": 777.0571194058559,
+  "bsgs_worst": 1651,
+  "budget": 6604,
+  "public": {
+   "keygen": "N is a lam-bit prime; x is sampled uniformly at random from [0, N).",
+   "params": {
+    "lam": 20
+   },
+   "N": "681047",
+   "labels": {
+    "g": "a60ff1670c9baf61bbb174394c3674853be22a6332c01cf0c6a2972c7e839431",
+    "h": "8fac6023ab10d1332e5fcceb80e293cdb53ecc41e1cfc75064558b9567f164e1"
+   },
+   "budget": 6604,
+   "queries_used": 1654
+  },
+  "solved": true,
+  "queries_at_solve": 1654,
+  "queries_used": 1654,
+  "submissions": [
+   {
+    "t": 284.88798689842224,
+    "q": 1654,
+    "correct": true
+   }
+  ],
+  "n_batches": 3,
+  "batch_log": [
+   [
+    284.81920552253723,
+    826
+   ],
+   [
+    284.82545280456543,
+    2
+   ],
+   [
+    284.88204979896545,
+    825
+   ]
+  ],
+  "seed": "bac2f59fd7f82c63d847c9ee70b66395"
+ },
+ "has_attack": true,
+ "replays": [
+  {
+   "lam": 20,
+   "N": "761069",
+   "solved": true,
+   "queries_at_solve": 1748,
+   "queries_used": 1748,
+   "budget": 6980,
+   "lb_expected": 821.4983122423854,
+   "bsgs_worst": 1745,
+   "wall_secs": 1.0,
+   "exit_code": 0,
+   "timed_out": false,
+   "seed": "e3666b724f6d49ad3a71f9aaa3d02a63",
+   "tail": "N=761069 x=760662 correct=True queries_used=1748 budget=6980\r\n760662\r\n"
+  },
+  {
+   "lam": 20,
+   "N": "884087",
+   "solved": true,
+   "queries_at_solve": 1884,
+   "queries_used": 1884,
+   "budget": 7524,
+   "lb_expected": 885.4833845537826,
+   "bsgs_worst": 1881,
+   "wall_secs": 0.9,
+   "exit_code": 0,
+   "timed_out": false,
+   "seed": "83457c52e6265ad8e1f9673912a7a22a",
+   "tail": "N=884087 x=182245 correct=True queries_used=1884 budget=7524\r\n182245\r\n"
+  },
+  {
+   "lam": 20,
+   "N": "624031",
+   "solved": true,
+   "queries_at_solve": 1582,
+   "queries_used": 1582,
+   "budget": 6320,
+   "lb_expected": 743.7764534133721,
+   "bsgs_worst": 1580,
+   "wall_secs": 1.0,
+   "exit_code": 0,
+   "timed_out": false,
+   "seed": "8c5efd95b67a747e2d6ce6c99eb7e78d",
+   "tail": "N=624031 x=483090 correct=True queries_used=1582 budget=6320\r\n483090\r\n"
+  }
+ ],
+ "transcript_models": [
+  "claude-sonnet-5"
+ ],
+ "turns": 17,
+ "refusal": null
+}

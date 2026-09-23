@@ -1,0 +1,195 @@
+{
+ "episode": "sonnet_l36_s0",
+ "model": "claude-sonnet-5 (Claude Code subagent, effort medium)",
+ "lam": 36,
+ "wall_secs_episode": 433.5,
+ "status": "finished",
+ "live": {
+  "lam": 36,
+  "N": "49383522533",
+  "x": "45877774151",
+  "lb_expected": 209513.83114919192,
+  "bsgs_worst": 444449,
+  "budget": 1777796,
+  "public": {
+   "keygen": "N is a lam-bit prime; x is sampled uniformly at random from [0, N).",
+   "params": {
+    "lam": 36
+   },
+   "N": "49383522533",
+   "labels": {
+    "g": "ea2faeeec203c1bc46aba553ecde8f8bf59673311888fa776af47b25b5f1f1ab",
+    "h": "55586bbcc72a0a34e18044eee76f0c6f6af8ea1e83db230024a16b9e0c52da6a"
+   },
+   "budget": 1777796,
+   "queries_used": 442228
+  },
+  "solved": true,
+  "queries_at_solve": 442228,
+  "queries_used": 442228,
+  "submissions": [
+   {
+    "t": 380.4317717552185,
+    "q": 442228,
+    "correct": true
+   }
+  ],
+  "n_batches": 25,
+  "batch_log": [
+   [
+    349.56018114089966,
+    1
+   ],
+   [
+    350.57326769828796,
+    20000
+   ],
+   [
+    351.76125478744507,
+    20000
+   ],
+   [
+    353.10305404663086,
+    20000
+   ],
+   [
+    354.4752221107483,
+    20000
+   ],
+   [
+    355.66757369041443,
+    20000
+   ],
+   [
+    357.0160562992096,
+    20000
+   ],
+   [
+    358.29138803482056,
+    20000
+   ],
+   [
+    359.65076994895935,
+    20000
+   ],
+   [
+    360.91616010665894,
+    20000
+   ],
+   [
+    362.14904379844666,
+    20000
+   ],
+   [
+    363.51433968544006,
+    20000
+   ],
+   [
+    363.70985770225525,
+    2225
+   ],
+   [
+    363.9112467765808,
+    1
+   ],
+   [
+    365.18350887298584,
+    20000
+   ],
+   [
+    366.6310164928436,
+    20000
+   ],
+   [
+    368.0336699485779,
+    20000
+   ],
+   [
+    369.4179711341858,
+    20000
+   ],
+   [
+    370.9102396965027,
+    20000
+   ],
+   [
+    372.2526695728302,
+    20000
+   ],
+   [
+    373.6553604602814,
+    20000
+   ],
+   [
+    375.29945731163025,
+    20000
+   ],
+   [
+    377.21013927459717,
+    20000
+   ],
+   [
+    378.90096855163574,
+    20000
+   ],
+   [
+    380.37299728393555,
+    20000
+   ]
+  ],
+  "seed": "b4df375618039ad8ab45522df9734c40"
+ },
+ "has_attack": true,
+ "replays": [
+  {
+   "lam": 36,
+   "N": "60672999449",
+   "solved": true,
+   "queries_at_solve": 492641,
+   "queries_used": 492641,
+   "budget": 1970552,
+   "lb_expected": 232230.68402105695,
+   "bsgs_worst": 492638,
+   "wall_secs": 37.3,
+   "exit_code": 0,
+   "timed_out": false,
+   "seed": "65cd9bd9be922696914363188a1cbfcb",
+   "tail": "N=60672999449 m=246320 x=60478083254 correct=True queries_used=492641 budget=1970552 time=36.5s\r\n"
+  },
+  {
+   "lam": 36,
+   "N": "37171899187",
+   "solved": true,
+   "queries_at_solve": 272804,
+   "queries_used": 272804,
+   "budget": 1542404,
+   "lb_expected": 181772.72792507158,
+   "bsgs_worst": 385601,
+   "wall_secs": 27.1,
+   "exit_code": 0,
+   "timed_out": false,
+   "seed": "23382c454aed5cbd394e6fd49035a5bc",
+   "tail": "N=37171899187 m=192802 x=12709502405 correct=True queries_used=272804 budget=1542404 time=25.9s\r\n"
+  },
+  {
+   "lam": 36,
+   "N": "57398774467",
+   "solved": true,
+   "queries_at_solve": 359584,
+   "queries_used": 359584,
+   "budget": 1916644,
+   "lb_expected": 225877.57989926968,
+   "bsgs_worst": 479161,
+   "wall_secs": 45.1,
+   "exit_code": 0,
+   "timed_out": false,
+   "seed": "ec964ef28c5ca17d8c2f188b44293424",
+   "tail": "N=57398774467 m=239582 x=25432955025 correct=True queries_used=359584 budget=1916644 time=42.3s\r\n"
+  }
+ ],
+ "transcript_models": [
+  "claude-sonnet-5"
+ ],
+ "turns": 13,
+ "refusal": null
+}

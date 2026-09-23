@@ -1,0 +1,2 @@
+{"workspace": "C:\\Users\\jacar\\AppData\\Local\\Temp\\ggm_dl_ws\\sonnet_l32_s0", "oracle_url": "http://127.0.0.1:64646"}
+{"status": "finished", "live_solved": true, "live_queries": 69361, "replays": [[true, 88085, 5.3], [true, 92327, 5.1], [true, 102604, 7.3]]}
