@@ -188,9 +188,15 @@ if __name__ == "__main__":
     os.makedirs(a.out, exist_ok=True)
     rows = [summarize(r) for r in load(a.runs)]
     ref = reference_rows(a.reference)
+    # operator-cancelled episodes (e.g. wall-clock) are reported in the table but not scored as failures
+    scored = [r for r in rows if r["status"] != "cancelled"]
     json.dump(rows, open(os.path.join(a.out, "summary.json"), "w"), indent=1)
-    plot_success(rows, ref, os.path.join(a.out, "success_vs_difficulty.png"))
-    plot_efficiency(rows, ref, os.path.join(a.out, "efficiency.png"))
-    md = table(rows)
+    plot_success(scored, ref, os.path.join(a.out, "success_vs_difficulty.png"))
+    plot_efficiency(scored, ref, os.path.join(a.out, "efficiency.png"))
+    md = table(scored)
+    cancelled = [r for r in rows if r["status"] == "cancelled"]
+    if cancelled:
+        md += "\n\nCancelled (not scored): " + ", ".join(
+            f"{r['episode']} ({r['live_queries_used']}/{r['budget']} live queries used)" for r in cancelled)
     open(os.path.join(a.out, "summary.md"), "w").write(md + "\n")
     print(md)

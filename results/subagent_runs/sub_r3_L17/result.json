@@ -1,0 +1,224 @@
+{
+ "episode": "sub_r3_L17",
+ "model": "claude-sonnet-5 (subagent)",
+ "rung": 3,
+ "level": 17,
+ "rep": 0,
+ "status": "finished",
+ "wall_secs": 427.2,
+ "live": {
+  "rung": 3,
+  "level": 17,
+  "N": "74876841534657638984776644628016061",
+  "x": "2112768771214203",
+  "secret_structure": {
+   "smooth_part": {
+    "3": 1,
+    "11": 1,
+    "17": 1,
+    "43": 1,
+    "53": 1
+   },
+   "S": 1278519,
+   "P": 58565294324650348555458811819,
+   "residual_interval": 3522512867
+  },
+  "q_ub": 118759,
+  "q_lb": 59350,
+  "naive_cost": "134217728",
+  "budget": 475036,
+  "meta": {
+   "log2_q_ub": 16.85767732483499,
+   "log2_q_lb": 15.856960409416631,
+   "log2_naive": 27.0,
+   "log2_budget": 18.85767732483499,
+   "ub_over_lb": 2.000994102780118,
+   "naive_over_budget": 282.54222416827355
+  },
+  "public": {
+   "rung_id": "ggm-dl-3",
+   "keygen": "x is sampled uniformly at random from [0, 2^52).",
+   "params": {
+    "t": 52
+   },
+   "N": "74876841534657638984776644628016061",
+   "labels": {
+    "g": "7f5b1a50b7497969fd9070a97c48b48ce595afd207caac19c1a69b8822404427",
+    "h": "7080e40aaf2395162f5b83722edb525b9435abb07c0a997dbe323f867d0a90ab"
+   },
+   "budget": 475036,
+   "queries_used": 118771
+  },
+  "solved": true,
+  "queries_at_solve": 118771,
+  "queries_used": 118771,
+  "submissions": [
+   {
+    "t": 317.9716229438782,
+    "q": 118771,
+    "correct": true
+   }
+  ],
+  "n_batches": 28,
+  "batch_log": [
+   [
+    314.3002347946167,
+    1
+   ],
+   [
+    314.30249404907227,
+    1
+   ],
+   [
+    314.30470395088196,
+    1
+   ],
+   [
+    314.3075530529022,
+    2
+   ],
+   [
+    314.3100709915161,
+    1
+   ],
+   [
+    314.3228123188019,
+    1
+   ],
+   [
+    314.325142621994,
+    1
+   ],
+   [
+    314.32742714881897,
+    4
+   ],
+   [
+    314.3298692703247,
+    1
+   ],
+   [
+    314.33245849609375,
+    1
+   ],
+   [
+    314.3343894481659,
+    1
+   ],
+   [
+    314.34834456443787,
+    5
+   ],
+   [
+    314.3523573875427,
+    6
+   ],
+   [
+    314.3729736804962,
+    1
+   ],
+   [
+    314.37671637535095,
+    1
+   ],
+   [
+    314.3918147087097,
+    1
+   ],
+   [
+    314.396169424057,
+    7
+   ],
+   [
+    314.39951038360596,
+    8
+   ],
+   [
+    314.4022786617279,
+    1
+   ],
+   [
+    314.4061553478241,
+    1
+   ],
+   [
+    314.4089732170105,
+    1
+   ],
+   [
+    314.4316062927246,
+    8
+   ],
+   [
+    314.43446946144104,
+    9
+   ],
+   [
+    314.4464809894562,
+    1
+   ],
+   [
+    314.4625794887543,
+    1
+   ],
+   [
+    314.47861075401306,
+    1
+   ],
+   [
+    317.0738778114319,
+    59351
+   ],
+   [
+    317.9021236896515,
+    59352
+   ]
+  ],
+  "seed": "b41965af88c79f4684481d0c4d32e5ed"
+ },
+ "harness": "claude-code-subagent",
+ "has_attack": true,
+ "replays": [
+  {
+   "level": 17,
+   "solved": true,
+   "queries_at_solve": 103073,
+   "queries_used": 103073,
+   "budget": 412232,
+   "q_ub": 103058,
+   "q_lb": 51497,
+   "exit_code": 0,
+   "timed_out": false,
+   "secs": 3.6,
+   "tail": "N=89577767361719061467464723909716157 (117 bits), t=52, budget=412232\r\nfactors: {7: 1, 41: 1, 61: 1, 97: 1, 52749308148151085054911598783: 1}\r\n  solved digit for 7^1: x = 4 (mod 7)  [queries so far: 10]\r\n  solved digit for 41^1: x = 31 (mod 41)  [queries so far: 28]\r\n  solved digit for 61^1: x = 42 (mod 61)  [queries so far: 48]\r\n  solved digit for 97^1: x = 40 (mod 97)  [queries so far: 72]\r\nr = x mod 1698179 = 1374433   (queries so far: 72)\r\nk_bound = 2652017030  (need ~102996 queries for final BSGS)\r\nrecovered x = 3597172290567671   (total queries: 103072)\r\nsubmit -> correct=True, queries_used=103073/412232\r\n"
+  },
+  {
+   "level": 17,
+   "solved": true,
+   "queries_at_solve": 124057,
+   "queries_used": 124057,
+   "budget": 496176,
+   "q_ub": 124044,
+   "q_lb": 61993,
+   "exit_code": 0,
+   "timed_out": false,
+   "secs": 3.9,
+   "tail": "N=45021461090047801517667899609379435 (116 bits), t=51, budget=496176\r\nfactors: {3: 1, 5: 1, 11: 1, 53: 1, 67: 1, 76839577566793479459764470289: 1}\r\n  solved digit for 3^1: x = 0 (mod 3)  [queries so far: 5]\r\n  solved digit for 5^1: x = 3 (mod 5)  [queries so far: 15]\r\n  solved digit for 11^1: x = 3 (mod 11)  [queries so far: 22]\r\n  solved digit for 53^1: x = 24 (mod 53)  [queries so far: 42]\r\n  solved digit for 67^1: x = 24 (mod 67)  [queries so far: 64]\r\nr = x mod 585915 = 564633   (queries so far: 64)\r\nk_bound = 3843219262  (need ~123988 queries for final BSGS)\r\nrecovered x = 981311422423038   (total queries: 124056)\r\nsubmit -> correct=True, queries_used=124057/496176\r\n"
+  },
+  {
+   "level": 17,
+   "solved": true,
+   "queries_at_solve": 104835,
+   "queries_used": 104835,
+   "budget": 419272,
+   "q_ub": 104818,
+   "q_lb": 52378,
+   "exit_code": 0,
+   "timed_out": false,
+   "secs": 2.6,
+   "tail": "N=53355154510836534008558253741808218 (116 bits), t=51, budget=419272\r\nfactors: {2: 1, 3: 1, 29: 1, 53: 1, 89: 1, 65007169605214367704680616871: 1}\r\n  solved digit for 2^1: x = 1 (mod 2)  [queries so far: 5]\r\n  solved digit for 3^1: x = 0 (mod 3)  [queries so far: 10]\r\n  solved digit for 29^1: x = 13 (mod 29)  [queries so far: 26]\r\n  solved digit for 53^1: x = 42 (mod 53)  [queries so far: 46]\r\n  solved digit for 89^1: x = 55 (mod 89)  [queries so far: 70]\r\nr = x mod 820758 = 382755   (queries so far: 70)\r\nk_bound = 2743561213  (need ~104760 queries for final BSGS)\r\nrecovered x = 742484158269771   (total queries: 104834)\r\nsubmit -> correct=True, queries_used=104835/419272\r\n"
+  }
+ ],
+ "turns": 38,
+ "refusal": null
+}

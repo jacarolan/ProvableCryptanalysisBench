@@ -159,4 +159,5 @@ def replay(attack_path: str, rung: int, level: int, budget_factor: int | None = 
         res = ch.result()
     return {"level": level, "solved": res["solved"], "queries_at_solve": res["queries_at_solve"],
             "queries_used": res["queries_used"], "budget": res["budget"], "q_ub": res["q_ub"], "q_lb": res["q_lb"],
-            "exit_code": r["exit_code"], "timed_out": r["timed_out"], "secs": r["secs"], "tail": r["output"][-1500:]}
+            "exit_code": r["exit_code"], "timed_out": r["timed_out"], "secs": r["secs"], "tail": r["output"][-1500:],
+            "secret_structure": res["secret_structure"], "seed": res["seed"]}

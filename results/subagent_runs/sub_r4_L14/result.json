@@ -1,0 +1,127 @@
+{
+ "episode": "sub_r4_L14",
+ "model": "claude-sonnet-5 (subagent)",
+ "rung": 4,
+ "level": 14,
+ "rep": 0,
+ "status": "finished",
+ "wall_secs": 581.3,
+ "live": {
+  "rung": 4,
+  "level": 14,
+  "N": "674115465923",
+  "x": "270541018032",
+  "secret_structure": {
+   "d": 12781,
+   "(p-1)/d": 52743562,
+   "p-1_factorization": {
+    "2": 1,
+    "359": 1,
+    "12781": 1,
+    "73459": 1
+   }
+  },
+  "q_ub": 14750,
+  "q_lb": 7260,
+  "naive_cost": "1642091",
+  "budget": 59000,
+  "meta": {
+   "log2_q_ub": 13.848427334023928,
+   "log2_q_lb": 12.825753832883112,
+   "log2_naive": 20.647102648699896,
+   "log2_budget": 15.848427334023928,
+   "ub_over_lb": 2.03168044077135,
+   "naive_over_budget": 27.832050847457626
+  },
+  "public": {
+   "rung_id": "ggm-dl-4",
+   "keygen": "x is sampled uniformly at random from [1, N). In addition to h = g^x, the challenger publishes h_d = g^(x^12781), i.e. g raised to x^d mod N, for d = 12781.",
+   "params": {
+    "d": 12781
+   },
+   "N": "674115465923",
+   "labels": {
+    "g": "7f5249790f5064940e9280b0b1e022457f69240aca19104827902255a215322f",
+    "h": "bdd6fee500cdf025ad66cb6a862703a6b7449c7e41e000174ef3ed6582b743e9",
+    "h_d": "fff18bb0b522aed6333a3636bf01c0b906dfe5c07e2e2ec2d85cd6ea1d6015bd"
+   },
+   "budget": 59000,
+   "queries_used": 14757
+  },
+  "solved": true,
+  "queries_at_solve": 14757,
+  "queries_used": 14757,
+  "submissions": [
+   {
+    "t": 548.0817122459412,
+    "q": 14757,
+    "correct": true
+   }
+  ],
+  "n_batches": 4,
+  "batch_log": [
+   [
+    548.0432453155518,
+    14526
+   ],
+   [
+    548.0647923946381,
+    1
+   ],
+   [
+    548.0780832767487,
+    228
+   ],
+   [
+    548.0802328586578,
+    1
+   ]
+  ],
+  "seed": "a6b99646e39c3b1459c1d46453d4a90e"
+ },
+ "harness": "claude-code-subagent",
+ "has_attack": true,
+ "replays": [
+  {
+   "level": 14,
+   "solved": true,
+   "queries_at_solve": 17175,
+   "queries_used": 17175,
+   "budget": 68680,
+   "q_ub": 17170,
+   "q_lb": 8473,
+   "exit_code": 0,
+   "timed_out": false,
+   "secs": 0.8,
+   "tail": "x = 171501047120\r\nsubmit correct: True\r\nqueries_used: 17175 / 68680\r\n"
+  },
+  {
+   "level": 14,
+   "solved": true,
+   "queries_at_solve": 13623,
+   "queries_used": 13623,
+   "budget": 54468,
+   "q_ub": 13617,
+   "q_lb": 6686,
+   "exit_code": 0,
+   "timed_out": false,
+   "secs": 0.7,
+   "tail": "x = 78702003545\r\nsubmit correct: True\r\nqueries_used: 13623 / 54468\r\n"
+  },
+  {
+   "level": 14,
+   "solved": true,
+   "queries_at_solve": 14143,
+   "queries_used": 14143,
+   "budget": 56544,
+   "q_ub": 14136,
+   "q_lb": 6951,
+   "exit_code": 0,
+   "timed_out": false,
+   "secs": 0.7,
+   "tail": "x = 472858920592\r\nsubmit correct: True\r\nqueries_used: 14143 / 56544\r\n"
+  }
+ ],
+ "turns": 26,
+ "refusal": null
+}

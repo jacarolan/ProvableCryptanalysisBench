@@ -46,6 +46,13 @@ analysis/
 scripts/
   verify_reference.py              reference attacks within Q*_UB, naive cost far above budget
   example_attacks/ph_interval_attack.py   self-contained attack used to smoke-test the replay path
+  subagent_episode.py              hosts one episode for an externally driven agent (Claude Code subagent)
+  start_hosts.sh / collect_episode.sh / import_subagent_trace.py   subagent-harness helpers
+results/
+  reference_verification.json, ladder.md   certified ladders (57 instances)
+  subagent_runs/<episode>/         result.json, attack.py, trace.json, workspace/ for each pilot episode
+  subagent_pilot/                  summary.md/json, efficiency.png, success_vs_difficulty.png
+  subagent_audit.json, subagent_extrapolation.json
 ```
 
 ## Running
@@ -91,6 +98,10 @@ python analysis/analyze.py && python analysis/audit.py && python analysis/extrap
   step is to extend certified difficulty to real schemes. Where proofs are unavailable, the
   difficulty would come from estimators, e.g. the lattice estimator for LWE and
   CryptographicEstimators for decoding.
+- **Harness actually used.** API credentials were unavailable, so the pilot's 19 episodes ran
+  Sonnet 5 (medium effort) as Claude Code subagents driving the same challenger, task file and
+  replay protocol (`scripts/subagent_episode.py`). The API harness is implemented and
+  smoke-tested without model calls, but has not yet been run against a model.
 - **Models.** The pilot runs Sonnet 5 only, at effort `medium`, to keep cost low. The harness
   also supports Opus (`--models opus sonnet`). CryptanalysisBench reports that Fable 5's safeguards
   blocked cryptanalysis runs. Refusals, if any, are recorded as results.

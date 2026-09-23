@@ -214,5 +214,7 @@
    "secs": 3.6,
    "tail": "x = 349004140265519\r\nsubmit correct = True\r\nqueries_used = 108360 / budget = 433424\r\n"
   }
- ]
+ ],
+ "turns": 19,
+ "refusal": null
 }

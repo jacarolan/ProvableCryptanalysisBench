@@ -58,9 +58,10 @@ if __name__ == "__main__":
     ap.add_argument("--factor", type=int, default=8)
     ap.add_argument("--max-level", type=int, default=20)
     ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--only", nargs="*", default=None, help="episode names to include")
     a = ap.parse_args()
     eps = [os.path.join(a.runs, d) for d in sorted(os.listdir(a.runs))
-           if os.path.exists(os.path.join(a.runs, d, "attack.py"))]
+           if os.path.exists(os.path.join(a.runs, d, "attack.py")) and (not a.only or d in a.only)]
     with ThreadPoolExecutor(a.workers) as ex:
         res = list(ex.map(lambda e: run(e, a.reps, a.factor, a.max_level), eps))
     json.dump(res, open(a.out, "w"), indent=1)

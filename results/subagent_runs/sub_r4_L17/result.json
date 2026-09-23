@@ -1,0 +1,132 @@
+{
+ "episode": "sub_r4_L17",
+ "model": "claude-sonnet-5 (subagent)",
+ "rung": 4,
+ "level": 17,
+ "rep": 0,
+ "status": "finished",
+ "wall_secs": 881.4,
+ "live": {
+  "rung": 4,
+  "level": 17,
+  "N": "23614130615767",
+  "x": "14707925928054",
+  "secret_structure": {
+   "d": 8677,
+   "(p-1)/d": 2721462558,
+   "p-1_factorization": {
+    "2": 1,
+    "3": 1,
+    "6229": 1,
+    "8677": 1,
+    "72817": 1
+   }
+  },
+  "q_ub": 104521,
+  "q_lb": 52166,
+  "naive_cost": "9718875",
+  "budget": 418084,
+  "meta": {
+   "log2_q_ub": 16.673433307193793,
+   "log2_q_lb": 15.670822193758413,
+   "log2_naive": 23.212357894898677,
+   "log2_budget": 18.673433307193793,
+   "ub_over_lb": 2.00362304949584,
+   "naive_over_budget": 23.246225638866832
+  },
+  "public": {
+   "rung_id": "ggm-dl-4",
+   "keygen": "x is sampled uniformly at random from [1, N). In addition to h = g^x, the challenger publishes h_d = g^(x^8677), i.e. g raised to x^d mod N, for d = 8677.",
+   "params": {
+    "d": 8677
+   },
+   "N": "23614130615767",
+   "labels": {
+    "g": "8cdee5f97ebc11a932fda8d46f1dfaaea18ad293d95350eabb470de4d6705607",
+    "h": "63d1033be785f5115dc6216578990f85a01f0d1807cc2462641574d617036ec6",
+    "h_d": "d10d70f1db3290d294b5273b190d85253db5bfce021bd65b4940930c510ddc91"
+   },
+   "budget": 418084,
+   "queries_used": 113015
+  },
+  "solved": true,
+  "queries_at_solve": 113015,
+  "queries_used": 113015,
+  "submissions": [
+   {
+    "t": 848.3483591079712,
+    "q": 113015,
+    "correct": true
+   }
+  ],
+  "n_batches": 5,
+  "batch_log": [
+   [
+    845.3373131752014,
+    52167
+   ],
+   [
+    847.8681077957153,
+    52169
+   ],
+   [
+    847.9910714626312,
+    1
+   ],
+   [
+    848.3154811859131,
+    8676
+   ],
+   [
+    848.3353474140167,
+    1
+   ]
+  ],
+  "seed": "a2be57fb8bb682d3e4f16eeb1eda8ca0"
+ },
+ "harness": "claude-code-subagent",
+ "has_attack": true,
+ "replays": [
+  {
+   "level": 17,
+   "solved": true,
+   "queries_at_solve": 124951,
+   "queries_used": 124951,
+   "budget": 436560,
+   "q_ub": 109140,
+   "q_lb": 54442,
+   "exit_code": 0,
+   "timed_out": false,
+   "secs": 7.2,
+   "tail": "[*] instance N=47606402840429 d={'d': 16061} budget=436560 queries_used=0\r\n[*] recovered x = 41072001863150\r\n[*] queries used so far: 124950/436560\r\n[*] submit correct = True\r\n[*] total queries used: 124951/436560\r\n"
+  },
+  {
+   "level": 17,
+   "solved": true,
+   "queries_at_solve": 119819,
+   "queries_used": 119819,
+   "budget": 437968,
+   "q_ub": 109492,
+   "q_lb": 54642,
+   "exit_code": 0,
+   "timed_out": false,
+   "secs": 7.2,
+   "tail": "[*] instance N=31438731906539 d={'d': 10529} budget=437968 queries_used=0\r\n[*] recovered x = 12329756170334\r\n[*] queries used so far: 119818/437968\r\n[*] submit correct = True\r\n[*] total queries used: 119819/437968\r\n"
+  },
+  {
+   "level": 17,
+   "solved": true,
+   "queries_at_solve": 111999,
+   "queries_used": 111999,
+   "budget": 407080,
+   "q_ub": 101770,
+   "q_lb": 50781,
+   "exit_code": 0,
+   "timed_out": false,
+   "secs": 7.4,
+   "tail": "[*] instance N=26895901191587 d={'d': 10429} budget=407080 queries_used=0\r\n[*] recovered x = 1566398367027\r\n[*] queries used so far: 111998/407080\r\n[*] submit correct = True\r\n[*] total queries used: 111999/407080\r\n"
+  }
+ ],
+ "turns": 21,
+ "refusal": null
+}
