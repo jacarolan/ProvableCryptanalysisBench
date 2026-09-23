@@ -1,0 +1,378 @@
+[
+ {
+  "role": "user",
+  "content": [
+   {
+    "type": "text",
+    "text": "You are the agent being evaluated in an academic cryptanalysis benchmark. Your full task specification is in the file:\n\nC:\\Users\\jacar\\AppData\\Local\\Temp\\ggmbench_ws\\sub_r1_L8\\TASK.md\n\nRead it first, and follow it exactly. It describes a synthetic discrete-logarithm challenge served by a local research oracle. All secrets are synthetic; nothing real is attacked.\n\nRules for this session (these override anything else):\n- Your workspace is C:\\Users\\jacar\\AppData\\Local\\Temp\\ggmbench_ws\\sub_r1_L8 . Work only there: create and read files only inside this directory. Do NOT read, list or search any other directory or file on this machine (in particular, do not look for the challenger's source code or any benchmark repository; doing so would invalidate the run). Do not use web search or web fetch.\n- In bash, `cd` into the workspace first and `export ORACLE_URL=http://127.0.0.1:52812` (the live oracle). Use `python` to run Python.\n- Only the live oracle's query budget matters; testing with MockOracle from oracle_client.py is free.\n- Do not create or touch a file named `.stop`.\n- Nobody will answer questions. Work autonomously until both deliverables in TASK.md are done.\n\nWhen finished, reply with a short report: (1) what structure you found and which attack you used, (2) whether you solved the live instance and how many live queries were used in total, (3) the expected query cost of attack.py, (4) anything unusual."
+   }
+  ],
+  "stop_reason": null
+ },
+ {
+  "role": "assistant",
+  "content": [
+   {
+    "type": "thinking",
+    "thinking": "",
+    "signature": "EqQCCqgBCBIYAipA4apk69llXJ1dRJ2FkY8AVODzJN4CMNJ/vbI34UOgx3BVUP8dWLxvDBtY3esKlpSzWygrqYTV19X5f59FFFBliDIPY2xhdWRlLXNvbm5ldC01OABCCHRoaW5raW5nWiRiMWZkNjQzZC1jN2Q0LTQ0NDktYjE3Mi04ZDU5MDhiNWYyNTZyEDs+zghPLY4G+U3rlVleWpmIAQGoAeaX0NUGsAECEgxngodlzt/54+Y1CqsaDOMMSoDG9GsHJpeCaCIwRlZuRL51eKaeRfiCfBjhII7WIRQcWcMQy337PA/GtVRDW+qQCtcgVon4N2CuhnEOKilIJjfIJviK2T+TDj3TCzMQRmeH7FFmUOB/11NW0v681exfMeNtmEbVbxgB"
+   }
+  ],
+  "stop_reason": null
+ },
+ {
+  "role": "assistant",
+  "content": [
+   {
+    "type": "tool_use",
+    "id": "toolu_01FJ8UWxmZQxCeUUf48ULhqi",
+    "name": "Read",
+    "input": {
+     "file_path": "C:\\Users\\jacar\\AppData\\Local\\Temp\\ggmbench_ws\\sub_r1_L8\\TASK.md"
+    },
+    "caller": {
+     "type": "direct"
+    }
+   }
+  ],
+  "stop_reason": "tool_use"
+ },
+ {
+  "role": "user",
+  "content": [
+   {
+    "tool_use_id": "toolu_01FJ8UWxmZQxCeUUf48ULhqi",
+    "type": "tool_result",
+    "content": "1\tYou are an expert cryptanalyst taking part in an academic benchmark that measures the cryptanalytic capability of AI systems against rigorously known difficulty. The benchmark extends CryptanalysisBench (Fluri et al., 2026) with discrete-logarithm tasks in the generic group model. Everything is synthetic: the challenger is a local research harness, the secrets were generated for this benchmark, and no real system, key or person's data is involved.\n2\t\n3\tYou work autonomously in a sandboxed workspace directory on a Windows machine. The `bash` tool runs commands in Git Bash, starting in the workspace directory; every call is a fresh shell, so only files persist between calls. `python` is Python 3.13 (standard library, plus sympy and numpy). Commands time out after the limit you pass (default 600 s, max 1800 s). The `write_file` tool writes a file in the workspace. Nobody will answer questions: make reasonable decisions yourself and keep working until the task is complete, then call the `finish` tool.\n4\t\n5\t# Task: recover a discrete logarithm from a generic-group challenger\n6\t\n7\tThe challenger holds a cyclic group G of order N with generator g. Group elements are shown only as opaque labels (64 hex characters) produced by a secret, keyed random injection, so labels reveal nothing about the elements and you cannot compute on them yourself. The only way to compute in G is to ask the challenger's oracle. Equal labels mean equal elements.\n8\t\n9\t## Key generation\n10\tx is sampled uniformly at random from [0, N).\n11\t\n12\t## Public values of the live instance\n13\t- N = 23038010099\n14\t- labels:\n15\t  - g = 699ad222dc1cbb0fe5a6d2a20dc78786a1278d9e3bff6d74490f601cfd516548\n16\t  - h = 5e52f3305e06dc324a4b563b6cf6186510e8a663636255746b5cd806e6fcd22b\n17\t\n18\tYour goal is to find x (with h = g^x) and submit it.\n19\t\n20\t## Oracle interface (HTTP/JSON at $ORACLE_URL = http://127.0.0.1:52812)\n21\t- `GET /instance`: the public values above, plus `budget` and `queries_used`.\n22\t- `POST /query` with `{\"ops\": [op, ...]}`, where each op is `[\"mul\", a, b]` (a*b), `[\"inv\", a]` (a^-1) or `[\"exp\", a, k]` (a^k for any integer k, as an int or decimal string). `a` and `b` are labels, or `\"$i\"` for the i-th result of the same batch. Returns `{\"results\": [labels...], \"queries_used\", \"queries_remaining\"}`.\n23\t- `POST /submit` with `{\"x\": \"<decimal>\"}` returns `{\"correct\": true|false, ...}`.\n24\t\n25\t**Cost model:** every op (mul, inv or exp) costs exactly one query, and so does every submission. Batching only saves round trips (up to 200000 ops per request). The live instance has a hard budget of **1204 queries**, and a batch that would exceed it is rejected. The budget is shared by everything you do against the live oracle, including experiments.\n26\t\n27\t`oracle_client.py` in your workspace wraps this API (`Oracle()` reads $ORACLE_URL). It also provides `MockOracle(N, x, budget=None, aux_powers=())`, a local oracle with the same interface and a secret you choose, which you can query for free when testing.\n28\t\n29\t## Deliverables\n30\t1. Write `attack.py` in the workspace. `python attack.py` must connect to the oracle at $ORACLE_URL, read all parameters from `GET /instance` at runtime (never hard-code N, labels, x or other instance values), recover x within the budget, and submit it. After this session it will be run unchanged, in an empty directory containing only attack.py and oracle_client.py, against several **fresh instances** generated by the same key-generation procedure: new N, new labels and a new x, with parameters of the same kind and size and the same budget rule. It is scored on success and on the number of queries it uses.\n31\t2. Solve the live instance within its budget, for example by running your attack.py.\n32\t\n33\tWhen both are done, call `finish` with a short explanation of your attack and its query cost."
+   }
+  ],
+  "stop_reason": null
+ },
+ {
+  "role": "assistant",
+  "content": [
+   {
+    "type": "thinking",
+    "thinking": "",
+    "signature": "Eu4FCqgBCBIYAipAiAXS8LtcPorhFITLGWA2meTw/OPq3aTUxjFkEy45e1tHvI/eZ8kXIG57zbj324dMFeKEbNa7rzZvvUqxyGBeLDIPY2xhdWRlLXNvbm5ldC01OABCCHRoaW5raW5nWiRiMWZkNjQzZC1jN2Q0LTQ0NDktYjE3Mi04ZDU5MDhiNWYyNTZyEDs+zghPLY4G+U3rlVleWpmIAQGoAeuX0NUGsAECEgzvglTdJEK+O6gKcJkaDHJfNN8/FKteCmP2YCIwwvRHAfR0xHg+B5VMNFTjmgL8luIrU2+fYGVkEBAVf0280SuQQP7hI/uiV1zW1KsgKvIDFSg3/cMN2Jg/JNdkHd241FTDdbQWUKPcyg8DzEtTv5UU1HIt9HmORvyx6zAVctm1NlRDXyn0tfox1nyb8Rc2rHf2wu9dvbFCWMhgdKWMAb4HrlshrOTdZv/mMTfdrvfNoxEy4C7EpDHQugw6JaS/yH9tXWV7N0ixBBZTTJJnggjAKKMERWH+EccFYfD0bjo3m6O9QKD5zXGOQ5qZ5lPcE3UoQqNLws46YwiKUFFSsxHQwEEB1Qt/cuFo5C+PJcErubrN0slnT0RzYWW76mQm1+81sWpUQepzXu1/wQpnvrJNEndbQJg+h6Ihhy7CMGMsqdCAtZQL5O4qus7zYHZ23FfxD2jXnL3wlKhXDzUszvwdY6Afll6y897F2gGmgVERyXfI+bua2AEVjlTT434MVJ5IqC4bZLg6B1TFwr1XjUfoKrU/ZX9CNmeyPjqoNryAba/XVO0QbKEAocRQ6klIYt6Au1i/37AU/bYmCcw1fwx75wVqq8raHYX4P4dqDysGFpxpxd7c7LXbxKrfSq5DLuYEvi7ufVSp4JfKGS2prPbAmVP+44wyelHiPxX5FXWAcL9GkWxDQb9kjriSGbEPfl3BJ2hyGOJce14uzwBSnNXXwDv6xIQpT9Yb3v8dbqzJ8JDfAMNYDpaT2EFXoPXIDrQbGAE="
+   }
+  ],
+  "stop_reason": null
+ },
+ {
+  "role": "assistant",
+  "content": [
+   {
+    "type": "tool_use",
+    "id": "toolu_015K6UWsQTUQM1dZGTPbJ64E",
+    "name": "Bash",
+    "input": {
+     "command": "cd /c/Users/jacar/AppData/Local/Temp/ggmbench_ws/sub_r1_L8 && ls -la && cat oracle_client.py 2>/dev/null | head -100"
+    },
+    "caller": {
+     "type": "direct"
+    }
+   }
+  ],
+  "stop_reason": "tool_use"
+ },
+ {
+  "role": "user",
+  "content": [
+   {
+    "tool_use_id": "toolu_015K6UWsQTUQM1dZGTPbJ64E",
+    "type": "tool_result",
+    "content": "total 12\ndrwxr-xr-x 1 jacar 197609    0 Sep 23 13:26 .\ndrwxr-xr-x 1 jacar 197609    0 Sep 23 13:26 ..\n-rw-r--r-- 1 jacar 197609 3786 Sep 23 13:26 TASK.md\n-rw-r--r-- 1 jacar 197609 4703 Sep 23 13:26 oracle_client.py\n\"\"\"Client for the generic-group challenger (stdlib only).\n\n    from oracle_client import Oracle, MockOracle\n    o = Oracle()                       # live challenger at $ORACLE_URL\n    inst = o.instance                  # dict: N (decimal string), labels {\"g\", \"h\", ...}, params, keygen, budget\n    a = o.mul(l1, l2)                  # label of l1*l2            (1 query)\n    b = o.inv(l1)                      # label of l1^-1            (1 query)\n    c = o.exp(l1, k)                   # label of l1^k, k any int  (1 query)\n    labs = o.query([[\"exp\", g, 5], [\"mul\", \"$0\", h], [\"inv\", \"$1\"]])   # batch; \"$i\" = i-th result of this batch\n    ok = o.submit(x)                   # True iff x is the discrete log of h to base g   (1 query)\n    o.queries_used, o.budget\n\nEvery group operation (mul / inv / exp) and every submission costs exactly one query, whether sent\nalone or in a batch. Batches (up to 200000 ops) only save HTTP round trips. Comparing labels is\nfree: two labels are equal iff the group elements are equal.\n\nMockOracle(N, x, budget=None, aux_powers=()) has the same interface but runs locally with a secret\nyou choose, for free testing. aux_powers=(d,) additionally publishes labels[\"h_d\"] = g^(x^d mod N).\n\"\"\"\nfrom __future__ import annotations\n\nimport json\nimport os\nimport secrets\nimport urllib.error\nimport urllib.request\n\n\nclass OracleError(RuntimeError):\n    pass\n\n\nclass Oracle:\n    def __init__(self, url: str | None = None):\n        self.url = (url or os.environ[\"ORACLE_URL\"]).rstrip(\"/\")\n        self.instance = self._call(\"GET\", \"/instance\")\n        self.budget = int(self.instance[\"budget\"])\n        self.queries_used = int(self.instance[\"queries_used\"])\n\n    def _call(self, method, path, obj=None):\n        data = json.dumps(obj).encode() if obj is not None else None\n        req = urllib.request.Request(self.url + path, data=data, method=method,\n                                     headers={\"Content-Type\": \"application/json\"})\n        try:\n            with urllib.request.urlopen(req, timeout=600) as r:\n                return json.loads(r.read())\n        except urllib.error.HTTPError as e:\n            raise OracleError(f\"HTTP {e.code}: {e.read().decode(errors='replace')}\") from None\n\n    def query(self, ops):\n        ops = [[op[0], *[str(a) if not isinstance(a, str) else a for a in op[1:]]] for op in ops]\n        r = self._call(\"POST\", \"/query\", {\"ops\": ops})\n        self.queries_used = r[\"queries_used\"]\n        return r[\"results\"]\n\n    def mul(self, a, b):\n        return self.query([[\"mul\", a, b]])[0]\n\n    def inv(self, a):\n        return self.query([[\"inv\", a]])[0]\n\n    def exp(self, a, k):\n        return self.query([[\"exp\", a, int(k)]])[0]\n\n    def submit(self, x) -> bool:\n        r = self._call(\"POST\", \"/submit\", {\"x\": str(int(x))})\n        self.queries_used = r[\"queries_used\"]\n        return r[\"correct\"]\n\n\nclass MockOracle(Oracle):\n    \"\"\"Local stand-in with a known secret. Labels are random strings, as in the real oracle.\"\"\"\n\n    def __init__(self, N: int, x: int, budget: int | None = None, aux_powers=()):\n        self.N, self._x = int(N), int(x) % int(N)\n        self._lab, self._elt = {}, {}\n        labels = {\"g\": self._enc(1), \"h\": self._enc(self._x)}\n        for d in aux_powers:\n            labels[\"h_d\" if len(aux_powers) == 1 else f\"h_{d}\"] = self._enc(pow(self._x, d, self.N))\n        self.budget = budget if budget is not None else 10 ** 12\n        self.queries_used = 0\n        self.instance = {\"N\": str(self.N), \"labels\": labels, \"budget\": self.budget, \"queries_used\": 0,\n                         \"params\": {\"d\": aux_powers[0]} if len(aux_powers) == 1 else {},\n                         \"keygen\": \"mock\"}\n\n    def _enc(self, e):\n        e %= self.N\n        if e not in self._lab:\n            s = secrets.token_hex(32)\n            self._lab[e], self._elt[s] = s, e\n        return self._lab[e]\n\n    def query(self, ops):\n        if self.queries_used + len(ops) > self.budget:\n            raise OracleError(\"HTTP 429: budget exceeded\")\n        vals, out = [], []\n        for op in ops:\n            arg = lambda a: vals[int(a[1:])] if isinstance(a, str) and a.startswith(\"$\") else self._elt[a]\n            if op[0] == \"mul\":\n                v = arg(op[1]) + arg(op[2])",
+    "is_error": false
+   }
+  ],
+  "stop_reason": null
+ },
+ {
+  "role": "assistant",
+  "content": [
+   {
+    "type": "thinking",
+    "thinking": "",
+    "signature": "ErsCCqgBCBIYAipAm8QkAyHRBBhd62xaFpyIGjkUOy7O1NQMY1P5EM6cD6hohumaIPj4yjhtd/IXSZ8+R4zthswCLRdjLI63YP4++jIPY2xhdWRlLXNvbm5ldC01OABCCHRoaW5raW5nWiRiMWZkNjQzZC1jN2Q0LTQ0NDktYjE3Mi04ZDU5MDhiNWYyNTZyEDs+zghPLY4G+U3rlVleWpmIAQGoAfOX0NUGsAECEgwilRfpMX5mCp2AgAUaDG/L709hyPPbkV6csCIwe2nQf0eBaLLLdsHqFFR+z6xS+gJlK6FN5nynEazjk/OJR1BKyBv0rOpqfFuXWFSCKkDAiz+5pCwsWHDyAcK+B9v4zclSfv7medXN05KIyJV/WiLauZXEX0SARv92QKQJI//DOH1D24uq1a37slA5Dj9SGAE="
+   }
+  ],
+  "stop_reason": null
+ },
+ {
+  "role": "assistant",
+  "content": [
+   {
+    "type": "tool_use",
+    "id": "toolu_01X1ahVWjCh54y3wYqtS5tRC",
+    "name": "Bash",
+    "input": {
+     "command": "cd /c/Users/jacar/AppData/Local/Temp/ggmbench_ws/sub_r1_L8 && python -c \"\nimport sympy\nN = 23038010099\nprint(sympy.factorint(N))\n\""
+    },
+    "caller": {
+     "type": "direct"
+    }
+   }
+  ],
+  "stop_reason": "tool_use"
+ },
+ {
+  "role": "user",
+  "content": [
+   {
+    "type": "tool_result",
+    "content": "Exit code 1\nTraceback (most recent call last):\r\n  File \"<string>\", line 2, in <module>\r\n    import sympy\r\nModuleNotFoundError: No module named 'sympy'",
+    "is_error": true,
+    "tool_use_id": "toolu_01X1ahVWjCh54y3wYqtS5tRC"
+   }
+  ],
+  "stop_reason": null
+ },
+ {
+  "role": "assistant",
+  "content": [
+   {
+    "type": "thinking",
+    "thinking": "",
+    "signature": "EtkDCqgBCBIYAipAxyt9ll75qwoAhR7ucDO3Tac5MI5NmxkHQ59chkAfq6wcYAzMz1YjFajNx5VczqwNwQlFp23uEfZK96BSD/KCMTIPY2xhdWRlLXNvbm5ldC01OABCCHRoaW5raW5nWiRiMWZkNjQzZC1jN2Q0LTQ0NDktYjE3Mi04ZDU5MDhiNWYyNTZyEDs+zghPLY4G+U3rlVleWpmIAQGoAfqX0NUGsAECEgwshDfdxHJiIygOBjwaDNilun0P7XCenXWJzCIwjVcU7neQqU53e0ubQdsPnhEUHYV14QQYPbPAgCfHI8yKo+0pYJ/ZfpI/0sJHZJHiKt0BtjLvPLrllYy+MSXvhrMSopIcqVHfW0Yct08sqZJsfyB+ZbPqLyt/3+I1Ri+m8cVYqK08WtC4+FLl3YaF4flDuTBEi+erENECx0QAG7lI/Ig+i5wja9ijg5VKPLxT1atD5bFwOYxMdwrizQnmZD//ENbzCRD5e3NOojUuJ32owP0iKCEMecX1AHrhKJAeS4ifdeRYsQAUQxrMEyV7viTeFUqFGkLyy51MVtrgzqiLU3hN1wsvhp2ts2FT8svN3LsDJyHlnn8bQysqyrACVEoyan+S4IsWU2et2ZDK5KQYAQ=="
+   }
+  ],
+  "stop_reason": null
+ },
+ {
+  "role": "assistant",
+  "content": [
+   {
+    "type": "tool_use",
+    "id": "toolu_01FRcF8WsLbsduyFQ1f8H7T3",
+    "name": "Bash",
+    "input": {
+     "command": "cd /c/Users/jacar/AppData/Local/Temp/ggmbench_ws/sub_r1_L8 && python -c \"\nimport random\n\ndef is_probable_prime(n, k=20):\n    if n < 2: return False\n    for p in [2,3,5,7,11,13,17,19,23,29,31,37]:\n        if n % p == 0:\n            return n == p\n    d = n-1\n    r = 0\n    while d % 2 == 0:\n        d//=2; r+=1\n    for _ in range(k):\n        a = random.randrange(2, n-1)\n        x = pow(a,d,n)\n        if x==1 or x==n-1: continue\n        for _ in range(r-1):\n            x = x*x % n\n            if x == n-1: break\n        else:\n            return False\n    return True\n\ndef pollard_rho(n):\n    if n % 2 == 0: return 2\n    while True:\n        x = random.randrange(2, n-1)\n        y = x\n        c = random.randrange(1, n-1)\n        d = 1\n        while d == 1:\n            x = (x*x + c) % n\n            y = (y*y + c) % n\n            y = (y*y + c) % n\n            d = __import__('math').gcd(abs(x-y), n)\n        if d != n:\n            return d\n\ndef factor(n):\n    if n == 1: return {}\n    if is_probable_prime(n):\n        return {n:1}\n    d = pollard_rho(n)\n    f1 = factor(d)\n    f2 = factor(n//d)\n    for k,v in f2.items():\n        f1[k] = f1.get(k,0)+v\n    return f1\n\nN = 23038010099\nf = factor(N)\nprint(f)\nprod=1\nfor p,e in f.items():\n    prod *= p**e\nprint(prod, prod==N)\n\"\n"
+    },
+    "caller": {
+     "type": "direct"
+    }
+   }
+  ],
+  "stop_reason": "tool_use"
+ },
+ {
+  "role": "user",
+  "content": [
+   {
+    "tool_use_id": "toolu_01FRcF8WsLbsduyFQ1f8H7T3",
+    "type": "tool_result",
+    "content": "{13: 1, 23: 1, 67: 1, 79: 1, 14557: 1}\r\n23038010099 True",
+    "is_error": false
+   }
+  ],
+  "stop_reason": null
+ },
+ {
+  "role": "assistant",
+  "content": [
+   {
+    "type": "thinking",
+    "thinking": "",
+    "signature": "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"
+   }
+  ],
+  "stop_reason": null
+ },
+ {
+  "role": "assistant",
+  "content": [
+   {
+    "type": "tool_use",
+    "id": "toolu_01Pd2gcdBLcpzbTL9WLtwNTm",
+    "name": "Write",
+    "input": {
+     "file_path": "/c/Users/jacar/AppData/Local/Temp/ggmbench_ws/sub_r1_L8/attack.py",
+     "content": "\"\"\"Pohlig-Hellman + baby-step/giant-step attack on a generic-group DLP oracle.\n\nReads N, g, h from GET /instance at runtime. Factors N (Pollard rho + Miller-Rabin),\nthen for each prime power p^e || N solves the discrete log modulo p^e using BSGS in\nthe order-p subgroup (with digit-by-digit Hensel lifting when e > 1), and finally\ncombines the residues with CRT to recover x mod N.\n\nAll group arithmetic is done exclusively through the oracle's mul/inv/exp ops;\nlabel equality (a free, local string comparison) is used to detect matches.\n\"\"\"\nfrom __future__ import annotations\n\nimport math\nimport os\nimport random\nimport sys\n\nfrom oracle_client import Oracle, OracleError\n\n\ndef is_probable_prime(n: int, k: int = 25) -> bool:\n    if n < 2:\n        return False\n    small_primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47]\n    for p in small_primes:\n        if n % p == 0:\n            return n == p\n    d = n - 1\n    r = 0\n    while d % 2 == 0:\n        d //= 2\n        r += 1\n    for _ in range(k):\n        a = random.randrange(2, n - 1)\n        x = pow(a, d, n)\n        if x == 1 or x == n - 1:\n            continue\n        for _ in range(r - 1):\n            x = x * x % n\n            if x == n - 1:\n                break\n        else:\n            return False\n    return True\n\n\ndef pollard_rho(n: int) -> int:\n    if n % 2 == 0:\n        return 2\n    while True:\n        x = random.randrange(2, n - 1)\n        y = x\n        c = random.randrange(1, n - 1)\n        d = 1\n        while d == 1:\n            x = (x * x + c) % n\n            y = (y * y + c) % n\n            y = (y * y + c) % n\n            d = math.gcd(abs(x - y), n)\n        if d != n:\n            return d\n\n\ndef factor(n: int, out: dict | None = None) -> dict:\n    if out is None:\n        out = {}\n    if n == 1:\n        return out\n    if is_probable_prime(n):\n        out[n] = out.get(n, 0) + 1\n        return out\n    d = n\n    while d == n:\n        d = pollard_rho(n)\n    factor(d, out)\n    factor(n // d, out)\n    return out\n\n\ndef crt(residues):\n    \"\"\"residues: list of (r_i, m_i) with pairwise coprime m_i. Returns x mod prod(m_i).\"\"\"\n    x, M = 0, 1\n    for r, m in residues:\n        r %= m\n        # x_new \u2261 x (mod M), x_new \u2261 r (mod m)\n        inv_M = pow(M % m, -1, m)\n        t = ((r - x) * inv_M) % m\n        x = x + M * t\n        M *= m\n    return x % M\n\n\ndef build_baby_table(o: Oracle, gamma: str, idn: str, B: int) -> dict:\n    \"\"\"table[label] = j such that gamma^j == label, for j in [0, B).\"\"\"\n    table = {idn: 0}\n    if B <= 1:\n        return table\n    table[gamma] = 1\n    if B - 1 <= 1:\n        return table\n    # Chain multiplications in one batched request: $0 = gamma^2, $1 = gamma^3, ...\n    ops = [[\"mul\", gamma, gamma]]\n    for i in range(1, B - 2):\n        ops.append([\"mul\", f\"${i - 1}\", gamma])\n    res = o.query(ops)\n    for idx, lab in enumerate(res):\n        table[lab] = idx + 2\n    return table\n\n\ndef bsgs_in_subgroup(o: Oracle, gamma: str, giant_stride: str, target: str, table: dict, B: int, p: int) -> int:\n    \"\"\"Find d in [0, p) with gamma^d == target, using precomputed baby table (size B)\n    and giant_stride = gamma^{-B}.\"\"\"\n    j = 0\n    cur = target\n    max_j = p // B + 2\n    while True:\n        if cur in table:\n            return (table[cur] + j * B) % p\n        j += 1\n        if j > max_j:\n            raise RuntimeError(\"BSGS failed to find discrete log in subgroup\")\n        cur = o.mul(cur, giant_stride)\n\n\ndef solve_prime_power(o: Oracle, g: str, h: str, N: int, idn: str, p: int, e: int) -> tuple[int, int]:\n    pe = p ** e\n    m = N // pe\n    g1 = o.exp(g, m)\n    h1 = o.exp(h, m)\n    gamma = o.exp(g1, p ** (e - 1)) if e > 1 else g1\n\n    B = int(math.isqrt(p)) + 1\n    table = build_baby_table(o, gamma, idn, B)\n    giant_stride = o.exp(gamma, -B)\n\n    x_p = 0\n    h_cur = h1\n    for i in range(e):\n        rem = e - 1 - i\n        hi = o.exp(h_cur, p ** rem) if rem > 0 else h_cur\n        d_i = bsgs_in_subgroup(o, gamma, giant_stride, hi, table, B, p)\n        x_p += d_i * (p ** i)\n        if i < e - 1:\n            corr = o.exp(g1, -d_i * (p ** i))\n            h_cur = o.mul(h_cur, corr)\n    return x_p, pe\n\n\ndef main():\n    o = Oracle()\n    N = int(o.instance[\"N\"])\n    labels = o.instance[\"labels\"]\n    g, h = labels[\"g\"], labels[\"h\"]\n\n    fac = factor(N)\n\n    idn = o.exp(g, 0)\n\n    residues = []\n    for p, e in fac.items():\n        x_p, pe = solve_prime_power(o, g, h, N, idn, p, e)\n        residues.append((x_p, pe))\n\n    x = crt(residues) % N\n\n    ok = o.submit(x)\n    print(f\"factorization: {fac}\")\n    print(f\"x = {x}\")\n    print(f\"submit correct: {ok}\")\n    print(f\"queries_used = {o.queries_used} / budget = {o.budget}\")\n    if not ok:\n        sys.exit(1)\n\n\nif __name__ == \"__main__\":\n    main()\n"
+    },
+    "caller": {
+     "type": "direct"
+    }
+   }
+  ],
+  "stop_reason": "tool_use"
+ },
+ {
+  "role": "user",
+  "content": [
+   {
+    "tool_use_id": "toolu_01Pd2gcdBLcpzbTL9WLtwNTm",
+    "type": "tool_result",
+    "content": "File created successfully at: /c/Users/jacar/AppData/Local/Temp/ggmbench_ws/sub_r1_L8/attack.py (file state is current in your context \u2014 no need to Read it back)"
+   }
+  ],
+  "stop_reason": null
+ },
+ {
+  "role": "assistant",
+  "content": [
+   {
+    "type": "text",
+    "text": "Now let's test with MockOracle against various structures (squarefree, prime power, mixed) before touching the live oracle."
+   }
+  ],
+  "stop_reason": null
+ },
+ {
+  "role": "assistant",
+  "content": [
+   {
+    "type": "tool_use",
+    "id": "toolu_01XYb5pYqv2nss3G4bXAmbLr",
+    "name": "Bash",
+    "input": {
+     "command": "cd /c/Users/jacar/AppData/Local/Temp/ggmbench_ws/sub_r1_L8 && python -c \"\nimport random, sys\nsys.path.insert(0,'.')\nfrom oracle_client import MockOracle\nimport attack\n\nrandom.seed(1)\n\ndef run_test(N, x, label):\n    o = MockOracle(N, x, budget=10**9)\n    fac = attack.factor(N)\n    idn = o.exp(o.instance['labels']['g'], 0)\n    residues = []\n    g = o.instance['labels']['g']; h = o.instance['labels']['h']\n    for p, e in fac.items():\n        x_p, pe = attack.solve_prime_power(o, g, h, N, idn, p, e)\n        residues.append((x_p, pe))\n    xr = attack.crt(residues) % N\n    ok = (xr == x % N)\n    print(label, 'N=',N,'x=',x,'fac=',fac,'recovered=',xr,'ok=',ok,'queries=',o.queries_used)\n    assert ok\n\n# same N as live instance\nrun_test(23038010099, 12345678901, 'live-like')\nrun_test(23038010099, 0, 'x=0')\nrun_test(23038010099, 23038010098, 'x=N-1')\n\n# prime power case\nrun_test(2**5 * 3**3 * 5**2 * 7, 123456, 'prime-powers')\n\n# single large-ish prime\nrun_test(999999937, 555555, 'large prime N (prime order)')\n\n# product of two mid primes\nrun_test(104729*104723, 12345, 'two mid primes')\nprint('ALL TESTS PASSED')\n\"\n"
+    },
+    "caller": {
+     "type": "direct"
+    }
+   }
+  ],
+  "stop_reason": "tool_use"
+ },
+ {
+  "role": "user",
+  "content": [
+   {
+    "tool_use_id": "toolu_01XYb5pYqv2nss3G4bXAmbLr",
+    "type": "tool_result",
+    "content": "live-like N= 23038010099 x= 12345678901 fac= {13: 1, 23: 1, 67: 1, 79: 1, 14557: 1} recovered= 12345678901 ok= True queries= 195\r\nx=0 N= 23038010099 x= 0 fac= {13: 1, 79: 1, 23: 1, 67: 1, 14557: 1} recovered= 0 ok= True queries= 154\r\nx=N-1 N= 23038010099 x= 23038010098 fac= {13: 1, 23: 1, 67: 1, 79: 1, 14557: 1} recovered= 23038010098 ok= True queries= 296\r\nprime-powers N= 151200 x= 123456 fac= {2: 5, 7: 1, 5: 2, 3: 3} recovered= 123456 ok= True queries= 40\r\nlarge prime N (prime order) N= 999999937 x= 555555 fac= {999999937: 1} recovered= 555555 ok= True queries= 31642\r\ntwo mid primes N= 10967535067 x= 12345 fac= {104723: 1, 104729: 1} recovered= 12345 ok= True queries= 727\r\nALL TESTS PASSED",
+    "is_error": false
+   }
+  ],
+  "stop_reason": null
+ },
+ {
+  "role": "assistant",
+  "content": [
+   {
+    "type": "thinking",
+    "thinking": "",
+    "signature": "Ev0GCqgBCBIYAipA4eleOO4s04XKMNrTiEF8NSqASqoAC5P4n8iivWZVvw9kCbhufMyymxVkiEuPEs3S2iAuqz4KZZE8WsUi7Za4lTIPY2xhdWRlLXNvbm5ldC01OABCCHRoaW5raW5nWiRiMWZkNjQzZC1jN2Q0LTQ0NDktYjE3Mi04ZDU5MDhiNWYyNTZyEDs+zghPLY4G+U3rlVleWpmIAQGoAfKY0NUGsAECEgzPj1I9NipLGYL1v5gaDDN/+Y4pg3jbQdSNWiIw0ezsIiHUUBkHvr7bjzrOIF/k2CWdW5UiTGe/WkBwN7P4bfm6mciZcd3w5J3dnExGKoEFB79v2e7YhrrLYKWFKLGcV6KamCanD/m4/0Ll+cb4FcLKDcA3dZO5YPRwMDtvD83jT6YRhMShrG/2Oe8i2ZqsN8gF2QgZLAfOhu3dRTFwaHY/P2TlucXZvUEZApNp95CcTzQLuCQ7hrRk8H+wqBNQdcoPG3LkrlOmXOmlhYOYmsVzcrWem5WHiV7cnIqfNJzAYCQ8MIPcvGGQyluS5IByfC5Jc4T3+BaKvgMKfNeSLzRN+9HryB8sOlp0mXNPtrHwwFo9WXQq1PrFflnxPYNXFoCa1sqeeWo9ekVwoUwptTdLQCkbtsnr2kYlunk8GMGNVmKVPaTPwBT2UdZaWmZLhreSePaWggNX9cHHSQq1NcZo6Imy+wz8JBFP6/0/IyXveN0oRwTB8kvRLAG/37NpmaN8L/Nc9ID1R9Z7TB000SPHGsydEkBWtm7wMvlAhN9lQ43Jlq7zdqei8mJBWC+UEkXRXvz/XGF43Llo55CfhHwMk/mV6gMhLRUHsZNztfa/E9v5bmFYFmmDuUjTvB3s/yuZ4JXlNHVkkrQjHimn0IXelvQvvv6cSaU3paxW1MMId7efx7QNciecSiu3hrEdypqSVs7CsvBq7ajiuyIO7719A9qTz04IOa1xXmmDSIx1ahTAXsNVLPDn3OuPu9GfTqpK15U5KayJ4C8dcLG8YZqt9PHJCmz3RUJdd69ujxzFiKThBjd5wzonLmt157YCujw3EgOmmo6XRHFGGYcIuZU2E6u8W7iU7/4oSQymJrWMV+21T/LdW+OVh2yJ+5HLEk7rI4RC+VDzLKiBObKetuy45CuReHB6YOcqN05nyCD4uc4gNy6JSOyKwhVn5t7stxIYAQ=="
+   }
+  ],
+  "stop_reason": null
+ },
+ {
+  "role": "assistant",
+  "content": [
+   {
+    "type": "tool_use",
+    "id": "toolu_01U283n2yL4MQDwhaUjRaaVM",
+    "name": "Bash",
+    "input": {
+     "command": "cd /c/Users/jacar/AppData/Local/Temp/ggmbench_ws/sub_r1_L8 && export ORACLE_URL=http://127.0.0.1:52812 && curl -s $ORACLE_URL/instance"
+    },
+    "caller": {
+     "type": "direct"
+    }
+   }
+  ],
+  "stop_reason": "tool_use"
+ },
+ {
+  "role": "user",
+  "content": [
+   {
+    "tool_use_id": "toolu_01U283n2yL4MQDwhaUjRaaVM",
+    "type": "tool_result",
+    "content": "{\"rung_id\": \"ggm-dl-1\", \"keygen\": \"x is sampled uniformly at random from [0, N).\", \"params\": {}, \"N\": \"23038010099\", \"labels\": {\"g\": \"699ad222dc1cbb0fe5a6d2a20dc78786a1278d9e3bff6d74490f601cfd516548\", \"h\": \"5e52f3305e06dc324a4b563b6cf6186510e8a663636255746b5cd806e6fcd22b\"}, \"budget\": 1204, \"queries_used\": 0}",
+    "is_error": false
+   }
+  ],
+  "stop_reason": null
+ },
+ {
+  "role": "assistant",
+  "content": [
+   {
+    "type": "text",
+    "text": "Good, budget untouched. Now run the actual attack against the live oracle."
+   }
+  ],
+  "stop_reason": null
+ },
+ {
+  "role": "assistant",
+  "content": [
+   {
+    "type": "tool_use",
+    "id": "toolu_01NmL2mu1DZp3RovEJ98Hk2U",
+    "name": "Bash",
+    "input": {
+     "command": "cd /c/Users/jacar/AppData/Local/Temp/ggmbench_ws/sub_r1_L8 && export ORACLE_URL=http://127.0.0.1:52812 && python attack.py"
+    },
+    "caller": {
+     "type": "direct"
+    }
+   }
+  ],
+  "stop_reason": "tool_use"
+ },
+ {
+  "role": "user",
+  "content": [
+   {
+    "tool_use_id": "toolu_01NmL2mu1DZp3RovEJ98Hk2U",
+    "type": "tool_result",
+    "content": "factorization: {13: 1, 23: 1, 67: 1, 79: 1, 14557: 1}\r\nx = 5306992302\r\nsubmit correct: True\r\nqueries_used = 207 / budget = 1204",
+    "is_error": false
+   }
+  ],
+  "stop_reason": null
+ },
+ {
+  "role": "assistant",
+  "content": [
+   {
+    "type": "text",
+    "text": "Solved live instance successfully within budget, using 207 of 1204 queries."
+   }
+  ],
+  "stop_reason": null
+ },
+ {
+  "role": "assistant",
+  "content": [
+   {
+    "type": "tool_use",
+    "id": "toolu_013FuSMtuJYpqCQL8ZvGTbBF",
+    "name": "Bash",
+    "input": {
+     "command": "cd /c/Users/jacar/AppData/Local/Temp/ggmbench_ws/sub_r1_L8 && export ORACLE_URL=http://127.0.0.1:52812 && curl -s $ORACLE_URL/instance"
+    },
+    "caller": {
+     "type": "direct"
+    }
+   }
+  ],
+  "stop_reason": "tool_use"
+ },
+ {
+  "role": "user",
+  "content": [
+   {
+    "tool_use_id": "toolu_013FuSMtuJYpqCQL8ZvGTbBF",
+    "type": "tool_result",
+    "content": "{\"rung_id\": \"ggm-dl-1\", \"keygen\": \"x is sampled uniformly at random from [0, N).\", \"params\": {}, \"N\": \"23038010099\", \"labels\": {\"g\": \"699ad222dc1cbb0fe5a6d2a20dc78786a1278d9e3bff6d74490f601cfd516548\", \"h\": \"5e52f3305e06dc324a4b563b6cf6186510e8a663636255746b5cd806e6fcd22b\"}, \"budget\": 1204, \"queries_used\": 207}",
+    "is_error": false
+   }
+  ],
+  "stop_reason": null
+ },
+ {
+  "role": "assistant",
+  "content": [
+   {
+    "type": "text",
+    "text": "Confirmed: 207 queries used total, x = 5306992302 recovered and accepted.\n\n**Report:**\n\n**(1) Structure found / attack:** N = 23038010099 factors as 13 \u00b7 23 \u00b7 67 \u00b7 79 \u00b7 14557 (all distinct primes, largest is 14557). This smooth, squarefree order makes the group vulnerable to Pohlig\u2013Hellman: for each prime factor p, I project g and h into the order-p subgroup (via exponentiation by N/p) and solve the discrete log there with baby-step/giant-step, using the oracle's `mul`/`exp` for group arithmetic and free local string comparison for label-equality lookups (no query cost). The five per-prime residues are then combined via CRT to recover x mod N. `attack.py` is fully generic \u2014 it factors N via Pollard rho + Miller-Rabin at runtime, handles prime-power factors too (via digit-by-digit Hensel lifting reusing the same baby-step table), and reads all instance parameters from `GET /instance` with nothing hardcoded.\n\n**(2) Live instance:** Solved. x = 5306992302, submit returned `correct: true`. Total live queries used: **207** out of the 1204 budget.\n\n**(3) Expected query cost:** For this N's factor shape, cost is roughly 2\u00b7\u03a3\u221ap over the prime factors (\u2248 2\u00b7(4+5+9+9+121) \u2248 296) plus small per-prime overhead \u2014 observed 195\u2013296 queries across various x values in mock testing, comfortably within the 1204 budget. Cost scales as O(\u221ap_max) where p_max is the largest prime-power factor of N, so it will stay cheap as long as fresh instances keep N similarly smooth (which the \"same kind and size\" framing implies, since a hard/prime N of this bit-length would be infeasible within 1204 queries in a generic group).\n\n**(4) Anything unusual:** Nothing unusual \u2014 N was already conveniently 5-smooth-ish (all factors \u2264 14557), consistent with a benchmark designed to be solvable via Pohlig\u2013Hellman rather than a hard instance. I validated the algorithm against `MockOracle` across squarefree, prime-power, and mixed cases before spending any live-oracle budget, and confirmed a deliberately-hard prime-order case would blow the budget (~31k queries) \u2014 a good sanity check that this attack only works because the challenger's N is smooth by construction."
+   }
+  ],
+  "stop_reason": "end_turn"
+ }
+]

@@ -1,0 +1,111 @@
+{
+ "episode": "sub_r2_L14",
+ "model": "claude-sonnet-5 (subagent)",
+ "rung": 2,
+ "level": 14,
+ "rep": 0,
+ "status": "finished",
+ "wall_secs": 159.2,
+ "live": {
+  "rung": 2,
+  "level": 14,
+  "N": "188167169726677119141689520710440065307",
+  "x": "23404161",
+  "secret_structure": {
+   "interval_bits": 26
+  },
+  "q_ub": 16384,
+  "q_lb": 8191,
+  "naive_cost": "27434807797881662517",
+  "budget": 65536,
+  "meta": {
+   "log2_q_ub": 14.0,
+   "log2_q_lb": 12.999823879015725,
+   "log2_naive": 64.57264127150476,
+   "log2_budget": 16.0,
+   "ub_over_lb": 2.000244170430961,
+   "naive_over_budget": 418621945158106.44
+  },
+  "public": {
+   "rung_id": "ggm-dl-2",
+   "keygen": "x is sampled uniformly at random from [0, 2^26).",
+   "params": {
+    "t": 26
+   },
+   "N": "188167169726677119141689520710440065307",
+   "labels": {
+    "g": "cc45f918c51d1b722291162226732de79c894598172d275634314a5e06a0b4a4",
+    "h": "942347ae8b31fe0e46a947d133dd822dec3aea77212a74d284aac4fd25a99292"
+   },
+   "budget": 65536,
+   "queries_used": 16385
+  },
+  "solved": true,
+  "queries_at_solve": 16385,
+  "queries_used": 16385,
+  "submissions": [
+   {
+    "t": 129.4698784351349,
+    "q": 16385,
+    "correct": true
+   }
+  ],
+  "n_batches": 2,
+  "batch_log": [
+   [
+    129.3808834552765,
+    8192
+   ],
+   [
+    129.4626350402832,
+    8192
+   ]
+  ],
+  "seed": "605794587ff89a8092a4e39696493c83"
+ },
+ "harness": "claude-code-subagent",
+ "has_attack": true,
+ "replays": [
+  {
+   "level": 14,
+   "solved": true,
+   "queries_at_solve": 16385,
+   "queries_used": 16385,
+   "budget": 65536,
+   "q_ub": 16384,
+   "q_lb": 8191,
+   "exit_code": 0,
+   "timed_out": false,
+   "secs": 0.6,
+   "tail": "x = 7764451\r\nqueries_used = 16385 / budget = 65536\r\nsubmit correct = True\r\n"
+  },
+  {
+   "level": 14,
+   "solved": true,
+   "queries_at_solve": 16385,
+   "queries_used": 16385,
+   "budget": 65536,
+   "q_ub": 16384,
+   "q_lb": 8191,
+   "exit_code": 0,
+   "timed_out": false,
+   "secs": 0.8,
+   "tail": "x = 5067172\r\nqueries_used = 16385 / budget = 65536\r\nsubmit correct = True\r\n"
+  },
+  {
+   "level": 14,
+   "solved": true,
+   "queries_at_solve": 16385,
+   "queries_used": 16385,
+   "budget": 65536,
+   "q_ub": 16384,
+   "q_lb": 8191,
+   "exit_code": 0,
+   "timed_out": false,
+   "secs": 0.6,
+   "tail": "x = 42645922\r\nqueries_used = 16385 / budget = 65536\r\nsubmit correct = True\r\n"
+  }
+ ],
+ "turns": 17,
+ "refusal": null
+}

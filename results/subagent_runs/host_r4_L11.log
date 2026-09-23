@@ -1,0 +1,2 @@
+{"workspace": "C:\\Users\\jacar\\AppData\\Local\\Temp\\ggmbench_ws\\sub_r4_L11", "oracle_url": "http://127.0.0.1:52350"}
+{"status": "finished", "live_solved": true, "live_queries": 2059, "budget": 8220, "q_ub": 2055, "replays": [[true, 1954, 1950], [true, 2310, 2306], [true, 1979, 1975]]}

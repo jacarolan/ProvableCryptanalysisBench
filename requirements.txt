@@ -1,0 +1,4 @@
+anthropic>=1.8
+numpy
+matplotlib
+sympy
