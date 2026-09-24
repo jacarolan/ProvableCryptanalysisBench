@@ -1,0 +1,8 @@
+{
+  "episode": "reference_setup_smoke",
+  "lam": 128,
+  "model": "reference-exhaustive-search (not a model run)",
+  "effort": "not-applicable",
+  "created_at": 1790204228.7390778,
+  "model_provenance": "operator-supplied; external subagent"
+}

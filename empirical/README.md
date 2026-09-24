@@ -40,7 +40,17 @@ For each λ ∈ {16, 20, 24, 28, 32, 36, 40}:
    the same λ. It records the queries used and the wall-clock time of `python attack.py`, which
    includes Python startup and the localhost HTTP round trips.
 5. Plots come from the replays: `analysis/plot.py` writes `results/queries.png`,
-   `results/runtime.png` and `results/summary.md`.
+   `results/runtime.png`, `results/runtime_extrapolated.png` and `results/summary.md`.
+
+**Runtime extrapolation** (`analysis/runtime_fit.py`, parameters in `results/runtime_fit.json`):
+- **Model:** the measured runs are fitted to t = t₀ + k·√N, with t₀ ≈ 0.70 s of start-up
+  overhead and k ≈ 0.16 ms per √N (≈ 80 µs per query). Every attack is baby-step giant-step,
+  so the time grows like √N.
+- **Extrapolated times** (plotted to λ = 256 on a linear λ axis, where √N growth is a straight
+  line): about 2 min at λ = 40 (matching the measurement), a week at λ = 64,
+  10⁸ years at λ = 128, and 10²⁷ years at λ = 256.
+- **Assumptions:** the same machine and unlimited memory. BSGS stores ~√N labels, so the
+  estimates are optimistic beyond λ ≈ 60–70.
 
 Everything else is in `results/`:
 - `runs/<episode>/` holds each episode's `result.json`, `attack.py`, workspace and imported

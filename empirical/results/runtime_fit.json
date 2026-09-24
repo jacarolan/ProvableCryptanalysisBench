@@ -1,0 +1,8 @@
+{
+ "t0_secs": 0.7,
+ "k_secs_per_sqrtN": 0.0001609341096158388,
+ "n_points_slope": 12,
+ "min_lam_slope": 28,
+ "secs_per_query": 8.046697023249271e-05,
+ "model": "t = t0 + k*sqrt(N)"
+}

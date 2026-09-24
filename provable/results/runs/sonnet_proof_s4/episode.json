@@ -1,0 +1,23 @@
+{
+  "episode": "sonnet_proof_s4",
+  "lams": [
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+    64,
+    128,
+    256,
+    512,
+    1024,
+    2048,
+    4096
+  ],
+  "model": "claude-sonnet-5 (Claude Code subagent, effort medium)",
+  "effort": "medium",
+  "created_at": 1790206498.4239607,
+  "model_provenance": "operator-supplied; external subagent"
+}

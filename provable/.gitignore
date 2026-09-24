@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.cache/
+workspaces/
+lean/.lake/
+lean/**/*.olean
+lean/**/*.ilean
+lean/**/*.olean.*

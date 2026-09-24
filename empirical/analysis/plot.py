@@ -5,6 +5,8 @@ queries.png   x: security parameter lam (bits of the group order N), y: oracle q
                 attack, averaged over a random lam-bit prime N (ggm.instances.lb_expected);
               - Sonnet's attacks: queries used on each fresh replay instance (+ median).
 runtime.png   same x; y: wall-clock seconds of `python attack.py` on each replay (log scale).
+runtime_extrapolated.png   runtime fit t = t0 + k*sqrt(N), extrapolated to lam = 256
+              (analysis/runtime_fit.py); fit parameters in runtime_fit.json.
 """
 from __future__ import annotations
 
@@ -140,6 +142,11 @@ def main():
     pts = load(a.runs)
     plot_queries(pts, os.path.join(a.out, "queries.png"), a.label)
     plot_runtime(pts, os.path.join(a.out, "runtime.png"), a.label)
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import runtime_fit
+    f = runtime_fit.plot_extrapolated([p for p in pts if p["solved"]],
+                                      os.path.join(a.out, "runtime_extrapolated.png"), a.label)
+    json.dump(f, open(os.path.join(a.out, "runtime_fit.json"), "w"), indent=1)
     rows = ["| λ | N (bits) | solved | queries | LB on E[queries] (this N) | queries / LB | wall-clock (s) |",
             "|---|---|---|---|---|---|---|"]
     for p in sorted(pts, key=lambda p: (p["lam"], p["episode"])):

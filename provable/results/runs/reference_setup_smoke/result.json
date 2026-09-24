@@ -1,0 +1,28 @@
+{
+  "episode": "reference_setup_smoke",
+  "lam": 128,
+  "model": "reference-exhaustive-search (not a model run)",
+  "effort": "not-applicable",
+  "created_at": 1790204228.7390778,
+  "model_provenance": "operator-supplied; external subagent",
+  "schema_version": 1,
+  "status": "accepted",
+  "wall_secs_episode": 0.046889543533325195,
+  "has_certificate": true,
+  "verification_wall_secs": 139.32800000000861,
+  "certificate": {
+    "bound": {
+      "a": {
+        "op": "order"
+      },
+      "b": {
+        "op": "constant",
+        "value": 1
+      },
+      "op": "add"
+    },
+    "schema_version": 1,
+    "seeds": 1
+  },
+  "source_sha256": "5b88d3002704958ff011b91d534c99008f82dce2454af37de413bdef710069e6"
+}

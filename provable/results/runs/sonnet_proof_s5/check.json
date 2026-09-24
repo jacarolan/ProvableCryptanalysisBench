@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "status": "accepted",
+  "source_sha256": "46c3868b3592222f29f898163688737235520142b1d0175d026499f79cf2383c",
+  "problem": "uniform-prime-order-ggm-dlog",
+  "steps": [
+    {
+      "exit_code": 0,
+      "timed_out": false,
+      "wall_secs": 33.22985279999557,
+      "output": "",
+      "file": "Submission.lean"
+    },
+    {
+      "exit_code": 0,
+      "timed_out": false,
+      "wall_secs": 33.145248300017556,
+      "output": "'Submission.certificate' depends on axioms: [propext, Classical.choice, Quot.sound]\nGGM_CERT_JSON={\"bound\":{\"a\":{\"a\":{\"op\":\"constant\",\"value\":2},\"b\":{\"op\":\"sqrtOrder\"},\"op\":\"mul\"},\"b\":{\"op\":\"constant\",\"value\":3},\"op\":\"add\"},\"schema_version\":1,\"seeds\":1}\n",
+      "file": "Audit.lean"
+    }
+  ],
+  "certificate": {
+    "bound": {
+      "a": {
+        "a": {
+          "op": "constant",
+          "value": 2
+        },
+        "b": {
+          "op": "sqrtOrder"
+        },
+        "op": "mul"
+      },
+      "b": {
+        "op": "constant",
+        "value": 3
+      },
+      "op": "add"
+    },
+    "schema_version": 1,
+    "seeds": 1
+  },
+  "checker_sha256": "610719c4a990d3a95bb091fbbfd5a3af1eaab702126a134e99c4df712f6f7ce5",
+  "kernel_trust_level": 0,
+  "allowed_axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "cost_model": "unit-group-operations-plus-one-final-submission",
+  "lean_version": "Lean (version 4.24.0, x86_64-w64-windows-gnu, commit 797c613eb9b6d4ec95db23e3e00af9ac6657f24b, Release)",
+  "core_sha256": {
+    "GGM/Model.lean": "f0041033c2a49cc18fdcf59844d4bd0b63c6f80929b80ae9a96bbf66594a8e03",
+    "GGM/Certificate.lean": "c43a465be6e2e0b50846911790b0430b6a3c94a13416d0ed802d26c0909831bf",
+    "GGM/Export.lean": "8a4af48bc0f69d737467ea304012da35dec2e4b2cc7a307f83ed2716dddd0d29"
+  },
+  "manifest_sha256": "a42b440910621c08e6227f7ed7425ae0f20724284741ebcf309591d9f222eb43",
+  "core_cache_hit": true,
+  "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "verification_wall_secs": 66.52035000000615
+}

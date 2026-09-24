@@ -1,0 +1,14 @@
+name = "ggmproofs"
+version = "0.2.0"
+defaultTargets = ["GGM"]
+
+[leanOptions]
+relaxedAutoImplicit = false
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+
+[[lean_lib]]
+name = "GGM"
